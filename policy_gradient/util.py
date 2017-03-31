@@ -1,6 +1,7 @@
 from gym.spaces import Box, Discrete
 import numpy as np
 from scipy.signal import lfilter
+import pdb 
 
 def flatten_space(space):
 	if isinstance(space, Box):
@@ -19,7 +20,12 @@ Problem 3:
 Sample solution is about 1~7 lines.
 """
 
-# def discount_cumsum(x, discount_rate):
+def discount_cumsum(x, discount_rate):
     # YOUR CODE HERE >>>>>>
-    # return ???
+    xt = x[::1]
+    R = [xt[0]]
+    for i in range(1,x.shape[0]):
+        R.append(xt[i] + discount_rate * R[-1])
+    
+    return np.array(R[::-1])
     # <<<<<<<<

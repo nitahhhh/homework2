@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-
+import pdb
 class CategoricalPolicy(object):
     def __init__(self, in_dim, out_dim, hidden_dim, optimizer, session):
 
@@ -27,9 +27,18 @@ class CategoricalPolicy(object):
         Sample solution is about 2~4 lines.
         """
         # YOUR CODE HERE >>>>>>
-        # probs = ???
+        #layer 1
+        W1 = tf.Variable(tf.random_normal([in_dim, hidden_dim]))
+        b1 = tf.Variable(tf.random_normal([hidden_dim]))
+        y1 = tf.nn.relu(tf.matmul(self._observations, W1) + b1)
+        
+        #layer 2
+        W2 = tf.Variable(tf.random_normal([hidden_dim, out_dim]))
+        b2 = tf.Variable(tf.random_normal([out_dim]))
+        probs = tf.nn.softmax(tf.matmul(y1, W2) + b2)
+        #pdb.set_trace()
         # <<<<<<<<
-
+        
         # --------------------------------------------------
         # This operation (variable) is used when choosing action during data sampling phase
         # Shape of probs: [1, n_actions]
@@ -69,7 +78,7 @@ class CategoricalPolicy(object):
         Sample solution is about 1~3 lines.
         """
         # YOUR CODE HERE >>>>>>
-        # surr_loss = ???
+        surr_loss = -tf.reduce_mean(tf.mul(self._advantages,log_prob))
         # <<<<<<<<
 
         grads_and_vars = self._opt.compute_gradients(surr_loss)
